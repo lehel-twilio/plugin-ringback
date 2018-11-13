@@ -1,5 +1,4 @@
 import { FlexPlugin } from 'flex-plugin';
-import { Actions } from "@twilio/flex-ui";
 
 export default class WhispersPlugin extends FlexPlugin {
   name = 'RingbackPlugin';
@@ -24,11 +23,12 @@ export default class WhispersPlugin extends FlexPlugin {
       audio.src = audioFile
 
       audio.play()
-    }
 
-    Actions.replaceAction('AcceptTask', (payload, original) => {
-      audio.pause()
-      original(payload)
-    })
+      reservation.on('accepted', reservation => audio.pause())
+      reservation.on('canceled', reservation => audio.pause())
+      reservation.on('rejected', reservation => audio.pause())
+      reservation.on('rescinded', reservation => audio.pause())
+      reservation.on('timeout', reservation => audio.pause())
+    }
   }
 }
